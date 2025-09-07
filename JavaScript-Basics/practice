@@ -1,0 +1,46 @@
+//controlled vs uncontrolled components
+//to avoid un-necessary re-renders. - usecallback, useMemo
+//how to imporve UX if loading is taking time - 
+
+
+var a = 10;
+(function() {
+  console.log(a);
+  var a = 20;
+  console.log(a);
+})();
+
+//-----------
+console.log(typeof NaN);
+console.log(NaN === NaN);
+console.log(Object.is(NaN, NaN));
+
+//------------
+
+function foo() {
+
+  return {
+
+    bar: "hello"
+
+  };
+
+}
+
+function foo2() {
+
+  return
+
+  {
+
+    bar: "hello"
+
+  };
+
+}
+
+console.log(foo());
+
+console.log(foo2());
+
+ 
