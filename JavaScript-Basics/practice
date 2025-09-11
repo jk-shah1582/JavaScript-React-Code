@@ -9,12 +9,20 @@ var a = 10;
   var a = 20;
   console.log(a);
 })();
-
+//output : 
+// undefined 
+// 20
+// This is because of variable hoisting. Here as GEC and LEC both have variable a so when first console log is executed it looks for a in LEC and finds it but it is not initialized yet so it gives undefined. 
+// If there was no var a in LEC then it would have looked in GEC and printed 10.
 //-----------
 console.log(typeof NaN);
 console.log(NaN === NaN);
 console.log(Object.is(NaN, NaN));
-
+//output :
+// 'number'
+// false
+// true
+// NaN is of type number. NaN is not equal to anything including itself so NaN === NaN is false. Object.is is a method which checks if two values are same value. It considers NaN to be same as NaN so Object.is(NaN, NaN) is true.
 //------------
 
 function foo() {
@@ -43,4 +51,9 @@ console.log(foo());
 
 console.log(foo2());
 
- 
+ //output :
+ // { bar: 'hello' }
+ // undefined
+ // This is beacause of semicolon insertion by JS engine. In foo2 function after return statement there is a line break so JS engine automatically adds a semicolon after return statement and hence it returns undefined. 
+ // The code block after return statement is never reached. 
+ // If there was no line break after return statement then it would have returned the object { bar: 'hello' }.
