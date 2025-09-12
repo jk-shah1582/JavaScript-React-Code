@@ -1,32 +1,44 @@
-import { useState } from 'react'
-import Login from './components/Login'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import { useNavigate, Outlet } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import authService from './appwrite/auth_service';
+import { useSelector } from 'react-redux';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const userStatus = useSelector((state) => state.auth.status);
+  console.log("User status in App.jsx:", userStatus);
 
-  const handleLogin = (formData) => {
-    // Add your authentication logic here
-    console.log('Login attempted with:', formData);
-    setIsLoggedIn(true);
-  };
-  console.log(import.meta.env.VITE_APPWRITE_ENDPOINT);
+/*  useEffect(()=>{
+    authService.getCurrentUser().then((userData)=>{
+      if(!userData){
+        navigate('/login');
+      }
+      setUser(userData);
+    })
+  },[navigate]);*/
+  useEffect(() => {
+    async function checkUser() {
+      if(userStatus)
+      {
+        const user = await authService.getCurrentUser();
+        if (user) {
+            console.log('Logged in user:', user);
+            // Handle logged in state
+        } else {
+            console.log('No user logged in');
+            // Handle logged out state
+        }
+      }
+    }
+    checkUser();
+}, []);
   return (
     <>
-      {!isLoggedIn ? (
-        <Login onLogin={handleLogin} />
-      ) : (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Welcome! You are logged in!</h1>
-            <button 
-              onClick={() => setIsLoggedIn(false)}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      )}
+      <Header />
+      <Outlet />
+      <Footer />
     </>
   )
 }

@@ -1,57 +1,62 @@
-import React from "react";
-import {useForm} from "react-hook-form";
-import { useDispatch } from "react-redux";
-import  authService  from "../appwrite/auth_service";
+import { useState } from 'react';
 
-export default function Login() {
-    const { register, handleSubmit, formState: {errors} } = useForm();
-    const onSubmit = (data) => {
-        console.log("Login form submitted",data);
-        const userSession = authService.login(data);
-        // Handle login logic here
-    }
-        
-    
+const Login = ({ onLogin }) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin(formData);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Log In
+            Sign in to your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
                 placeholder="Enter your email"
-                {...register("email",{'required': true})}
               />
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
                 id="password"
                 name="password"
                 type="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
                 placeholder="Enter your password"
-                {...register("password",{'required': true})}
               />
             </div>
           </div>
@@ -64,17 +69,10 @@ export default function Login() {
               Sign in
             </button>
           </div>
-          <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Not Registered Yet Sing Up now
-              </label>
-              
-            </div>
         </form>
       </div>
     </div>
   );
-}
+};
+
+export default Login;
